@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Will you go out with me?</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
@@ -10,7 +10,9 @@
         body {
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
-            overflow: hidden; /* Prevent scrollbars when button moves */
+            /* Prevent scrolling and zooming on mobile */
+            overflow: hidden; 
+            touch-action: none;
         }
         .romantic-font {
             font-family: 'Pacifico', cursive;
@@ -21,7 +23,7 @@
             color: rgba(236, 72, 153, 0.2);
             animation: float 6s linear infinite;
             z-index: 0;
-            user-select: none;
+            pointer-events: none; /* Ensure clicks go through hearts */
         }
         @keyframes float {
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
@@ -33,42 +35,47 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-center items-center relative">
+<body class="h-[100dvh] w-screen flex flex-col justify-center items-center relative">
 
     <!-- Background Hearts Container -->
     <div id="hearts-container" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
 
     <!-- Main Card -->
-    <div id="main-card" class="bg-white/80 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-xl text-center max-w-md mx-4 z-10 border-4 border-white transform transition-all duration-500">
+    <!-- Added mx-4 and reduced padding for mobile (p-6) -->
+    <div id="main-card" class="bg-white/80 backdrop-blur-sm p-6 md:p-12 rounded-3xl shadow-xl text-center max-w-sm md:max-w-md mx-4 z-10 border-4 border-white transform transition-all duration-500">
         
         <!-- Cute Gif/Image -->
         <div class="mb-6">
-            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Cute Bear" class="w-32 h-32 mx-auto rounded-full object-cover shadow-md border-4 border-pink-200">
+            <!-- Slightly smaller image on mobile (w-28) -->
+            <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" alt="Cute Bear" class="w-28 h-28 md:w-32 md:h-32 mx-auto rounded-full object-cover shadow-md border-4 border-pink-200">
         </div>
 
-        <h1 class="romantic-font text-4xl md:text-5xl text-pink-600 mb-8 leading-tight">
+        <!-- Smaller text on mobile (text-3xl) -->
+        <h1 class="romantic-font text-3xl md:text-5xl text-pink-600 mb-8 leading-tight">
             Will you go out with me?
         </h1>
 
-        <div class="flex flex-col md:flex-row gap-4 justify-center items-center h-24 relative">
-            <button id="yesBtn" onclick="acceptProposal()" class="btn-transition px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full text-xl shadow-lg hover:shadow-pink-300/50 hover:scale-110 active:scale-95 cursor-pointer z-20">
+        <!-- Buttons Container -->
+        <div class="flex flex-col md:flex-row gap-4 justify-center items-center relative min-h-[60px]">
+            <button id="yesBtn" onclick="acceptProposal()" class="btn-transition px-8 py-3 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full text-lg md:text-xl shadow-lg hover:shadow-pink-300/50 hover:scale-110 active:scale-95 cursor-pointer z-20 w-full md:w-auto">
                 Yes! 💖
             </button>
             
-            <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()" ontouchstart="moveButton()" class="btn-transition px-8 py-3 bg-gray-200 text-gray-500 font-bold rounded-full text-xl hover:bg-gray-300 z-20 absolute md:static">
+            <!-- No button absolute on mobile to prevent layout shifts when it moves -->
+            <button id="noBtn" onclick="moveButton()" ontouchstart="moveButton(event)" class="btn-transition px-8 py-3 bg-gray-200 text-gray-500 font-bold rounded-full text-lg md:text-xl hover:bg-gray-300 z-20 w-full md:w-auto mt-2 md:mt-0">
                 No
             </button>
         </div>
     </div>
 
     <!-- Success Message (Hidden by default) -->
-    <div id="success-screen" class="hidden fixed inset-0 z-50 flex flex-col justify-center items-center bg-pink-100/90 backdrop-blur-md transition-opacity duration-1000">
-        <h1 class="romantic-font text-5xl md:text-7xl text-pink-600 mb-6 animate-bounce text-center">
+    <div id="success-screen" class="hidden fixed inset-0 z-50 flex flex-col justify-center items-center bg-pink-100/90 backdrop-blur-md transition-opacity duration-1000 p-4">
+        <h1 class="romantic-font text-4xl md:text-7xl text-pink-600 mb-6 animate-bounce text-center leading-tight">
             Yay! I knew it! ❤️
         </h1>
-        <p class="text-2xl text-pink-800 font-bold mb-8 text-center px-4">See you soon! 😘</p>
-        <img src="https://media.tenor.com/ivKWdfQ1RSgAAAAi/goma-peach.gif" alt="Celebration" class="w-48 h-48 rounded-2xl shadow-2xl border-4 border-white">
-        <button onclick="location.reload()" class="mt-12 px-6 py-2 bg-white text-pink-500 rounded-full font-bold shadow-md hover:bg-gray-50">
+        <p class="text-xl md:text-2xl text-pink-800 font-bold mb-8 text-center">See you soon! 😘</p>
+        <img src="https://media.tenor.com/ivKWdfQ1RSgAAAAi/goma-peach.gif" alt="Celebration" class="w-40 h-40 md:w-48 md:h-48 rounded-2xl shadow-2xl border-4 border-white">
+        <button onclick="location.reload()" class="mt-12 px-8 py-3 bg-white text-pink-500 rounded-full font-bold shadow-md hover:bg-gray-50 text-lg">
             Replay
         </button>
     </div>
@@ -96,7 +103,10 @@
         const yesBtn = document.getElementById('yesBtn');
         let isMoved = false;
 
-        function moveButton() {
+        function moveButton(e) {
+            // Prevent default touch behavior (zooming/scrolling) when touching the button
+            if(e) e.preventDefault();
+
             // Get the viewport dimensions
             const width = window.innerWidth;
             const height = window.innerHeight;
@@ -105,23 +115,29 @@
             const btnWidth = noBtn.offsetWidth;
             const btnHeight = noBtn.offsetHeight;
 
-            // Calculate new random position
-            // We use a buffer of 50px from edges to keep it accessible visually but hard to click
-            const newX = Math.random() * (width - btnWidth - 100) + 50;
-            const newY = Math.random() * (height - btnHeight - 100) + 50;
+            // Reduce buffer for mobile so it doesn't get stuck in corners
+            const buffer = 20; 
 
-            // Apply new position using fixed positioning to break out of the flex container
+            // Calculate new random position within safe bounds
+            const newX = Math.random() * (width - btnWidth - (buffer * 2)) + buffer;
+            const newY = Math.random() * (height - btnHeight - (buffer * 2)) + buffer;
+
+            // Apply new position using fixed positioning
             noBtn.style.position = 'fixed';
             noBtn.style.left = `${newX}px`;
             noBtn.style.top = `${newY}px`;
+            
+            // Ensure z-index keeps it above background but below success screen
+            noBtn.style.zIndex = '30';
             
             // Add a little rotation for chaos
             const rotation = Math.random() * 30 - 15;
             noBtn.style.transform = `rotate(${rotation}deg)`;
 
-            // If this is the first move, expand the Yes button slightly to encourage clicking it
+            // If this is the first move, expand the Yes button slightly
             if (!isMoved) {
                 isMoved = true;
+                // On mobile, maybe don't grow it too huge too fast
                 growYesButton();
             }
         }
@@ -129,6 +145,7 @@
         function growYesButton() {
             // Make the Yes button slightly larger every time they try to click No
             let currentScale = 1;
+            // Slightly gentle growth on mobile
             yesBtn.style.transform = `scale(${currentScale * 1.1})`;
         }
 
@@ -140,7 +157,7 @@
             successScreen.classList.remove('hidden');
             
             // Create a confetti explosion of hearts
-            setInterval(() => {
+            const confettiInterval = setInterval(() => {
                 const heart = document.createElement('div');
                 heart.innerHTML = '💖';
                 heart.style.position = 'fixed';
@@ -167,6 +184,9 @@
                 // Clean up heart after animation
                 setTimeout(() => heart.remove(), 3000);
             }, 100);
+
+            // Stop generating confetti after 10 seconds to save mobile battery
+            setTimeout(() => clearInterval(confettiInterval), 10000);
         }
     </script>
 </body>
